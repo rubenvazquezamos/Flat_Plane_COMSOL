@@ -69,12 +69,15 @@ SIsqflatnum = sum(SIflatnum.^2,2);
 delta_flatnum = (SIsumflatnum.^2 - SIsqflatnum)./((n_d-1)*(SIsqflatnum));
 
 run("QRD_TMM.m")
+figure()
 plot(Freq.Vector,delta_COMSOL,"LineWidth",1); %plot diffusion coefficient
 title("diffusion coefficient")
 hold on
 plot(Freq.Vector,delta_QRD,"LineWidth",1)
 hold on
 plot(Freq.Vector,delta_flatnum,"LineWidth",1)
+hold on
+plot(Freq.Vector,deltaf,"LineWidth",1,"LineStyle","--")
 ylim([0, 1])
-legend("N=5 QRD (numerical)","N=5 QRD (TMM)","flat plane (numerical)")
+legend("N=5 QRD (numerical)","N=5 QRD (TMM)","flat plane (numerical)","flat_plane (TMM)")
 %-------------------------------------------------------------------------%
