@@ -46,7 +46,8 @@ Probe.Coordinates(2,:) = Probe.radius*sin(Probe.theta_vector); %Probe y coordina
 %% FEM MODELLING
 %-------------------------------------------------------------------------%
 tStart = tic;
-Ps_1 = QR_5(Freq,Probe,File); %call COMSOL model
+Ps_1 = QR_5(Freq,Probe,File); %call COMSOL model for QRD
+Psflatnum = 
 tEnd = toc(tStart);
 fprintf('FEM. time: %d minutes and  %.f seconds\n', floor(tEnd/60), rem(tEnd,60));
 %-------------------------------------------------------------------------%
