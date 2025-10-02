@@ -27,9 +27,9 @@ File.Extension = '.mph';
 
 %% FREQUENCY
 %-------------------------------------------------------------------------%
-Freq.f_min = 250;                                  % Minimum Freq of interest
-Freq.f_max = 251;                               % Maximum Freq of interest
-Freq.df = 1;                                    % Freq discretization
+Freq.f_min = 125;                                  % Minimum Freq of interest
+Freq.f_max = 500;                               % Maximum Freq of interest
+Freq.df = 5;                                    % Freq discretization
 Freq.Vector = (Freq.f_min:Freq.df:Freq.f_max);    % Freq vector
 Freq.Nf = numel(Freq.Vector);                   % Number of frequencies
 
@@ -47,13 +47,14 @@ Probe.Coordinates(2,:) = Probe.radius*sin(Probe.theta_vector); %Probe y coordina
 %-------------------------------------------------------------------------%
 tStart = tic;
 Ps_1 = QR_5(Freq,Probe,File); %call COMSOL model for QRD
-Psflatnum = 
+Psflatnum = flat_plane(Freq,Probe,File);  %call COMSOL model for flat plane
 tEnd = toc(tStart);
 fprintf('FEM. time: %d minutes and  %.f seconds\n', floor(tEnd/60), rem(tEnd,60));
 %-------------------------------------------------------------------------%
 
 %% CALCULATE DIFFUSION COEFFICIENT
 %-------------------------------------------------------------------------%
+% QRD
 SI_1 = abs(Ps_1).^2; %sound intensity
 SIsum_1 = sum(SI_1,2);
 SIsq_1 = sum(SI_1.^2,2);
@@ -61,11 +62,19 @@ SIsq_1 = sum(SI_1.^2,2);
 n_d = length(Probe.theta_vector);
 delta_COMSOL = (SIsum_1.^2 - SIsq_1)./((n_d-1)*(SIsq_1));
 
+% Flat plane
+SIflatnum = abs(Psflatnum).^2; %sound intensity
+SIsumflatnum= sum(SIflatnum,2);
+SIsqflatnum = sum(SIflatnum.^2,2);
+delta_flatnum = (SIsumflatnum.^2 - SIsqflatnum)./((n_d-1)*(SIsqflatnum));
+
 run("QRD_TMM.m")
-plot(Freq.Vector,delta_COMSOL); %plot diffusion coefficient
-title("diffusion coefficient of N=5 QRD")
+plot(Freq.Vector,delta_COMSOL,"LineWidth",1); %plot diffusion coefficient
+title("diffusion coefficient")
 hold on
-plot(Freq.Vector,delta_QRD)
-legend("numerical","TMM")
+plot(Freq.Vector,delta_QRD,"LineWidth",1)
+hold on
+plot(Freq.Vector,delta_flatnum,"LineWidth",1)
 ylim([0, 1])
+legend("N=5 QRD (numerical)","N=5 QRD (TMM)","flat plane (numerical)")
 %-------------------------------------------------------------------------%

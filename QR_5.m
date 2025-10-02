@@ -111,19 +111,6 @@ model.component('comp1').geom('geom1').nodeGroup('grp1').add('r5');
 model.component('comp1').geom('geom1').run;
 model.component('comp1').geom('geom1').run('fin');
 
-flat = questdlg("do you want to simulate a flat plane?");
-switch flat
-    case 'Yes'
-    model.component('comp1').geom('geom1').feature('r2').active(false);
-    model.component('comp1').geom('geom1').feature('r3').active(false);
-    model.component('comp1').geom('geom1').feature('r4').active(false);
-    model.component('comp1').geom('geom1').feature('r5').active(false);
-    % model.component('comp1').geom('geom1').feature('r6').active(false);
-
-    
-    case 'No'
-end
-
 %%% EXTRA CODE: visualise the geometry before going further with
 % approval input with the [Enter] key.
 fig = figure();
