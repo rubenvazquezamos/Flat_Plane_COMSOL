@@ -100,24 +100,26 @@ kk = input('Is the geometry valid?');clear kk;
 disp(' -- Implementing physics')
 %-------------------------------------------------------------------------%
 
-
 model.component('comp1').physics.create('acpr', 'PressureAcoustics', 'geom1');
 model.component('comp1').physics('acpr').create('bpf1', 'BackgroundPressureField', 2);
 model.component('comp1').physics('acpr').feature('bpf1').selection.set([1]);
-% model.component('comp1').physics('acpr').create('efc1', 'ExteriorFieldCalculation', 1);
-% model.component('comp1').physics('acpr').feature('efc1').selection.set([4 5]);
-model.component('comp1').physics('acpr').create('pmb1', 'PerfectlyMatchedBoundary', 1);
-model.component('comp1').physics('acpr').feature('pmb1').selection.set([4 5]);
-model.component('comp1').physics('acpr').create('pmb2', 'PerfectlyMatchedBoundary', 1);
-model.component('comp1').physics('acpr').feature('pmb2').selection.set([1 3]);
-
 model.component('comp1').physics('acpr').feature('bpf1').set('p', 'p_inc');
 model.component('comp1').physics('acpr').feature('bpf1').set('dir', [0; -1; 0]);
 model.component('comp1').physics('acpr').feature('bpf1').set('phi', 'phi');
 model.component('comp1').physics('acpr').feature('bpf1').set('pamp', 1);
 model.component('comp1').physics('acpr').feature('bpf1').set('c_mat', 'from_mat');
-model.component('comp1').physics('acpr').feature('pmb2').set('directionType', 'normal');
 
+%-------------------------------------------------------------------------%
+%% PML
+disp(' -- Set PML')
+%-------------------------------------------------------------------------%
+model.component('comp1').physics('acpr').create('pmb1', 'PerfectlyMatchedBoundary', 1);
+model.component('comp1').physics('acpr').feature('pmb1').selection.set([4 5]);
+model.component('comp1').physics('acpr').feature('pmb1').set('directionType', 'radial');
+
+model.component('comp1').physics('acpr').create('pmb2', 'PerfectlyMatchedBoundary', 1);
+model.component('comp1').physics('acpr').feature('pmb2').selection.set([1 3]);
+model.component('comp1').physics('acpr').feature('pmb2').set('directionType', 'normal');
 
 %-------------------------------------------------------------------------%
 %% MATERIAL
