@@ -28,7 +28,7 @@ model.param.set('d3', '0.272[m]', 'Depth of well 3');
 model.param.set('d4', '0.272[m]', 'Depth of well 4');
 model.param.set('d5', '0.068[m]', 'Depth of well 5');
 model.param.set('d6', '0.000001[m]', 'Depth of well 6');
-model.param.set('r_air', '(L/2)*20', 'Radius of the air domain (for single diffuser)');
+model.param.set('r_air', 'L*40', 'Radius of the air domain (for single diffuser)');
 model.param.set('r0', '100[m]', 'Evaluation distance');
 model.param.set('Hair', '1[m]', 'Height of the air domain');
 model.param.set('Hpml', '0.2[m]', 'Thickness of the PML');
@@ -136,8 +136,8 @@ model.component('comp1').physics.create('acpr', 'PressureAcoustics', 'geom1');
 
 model.component('comp1').physics('acpr').create('bpf1', 'BackgroundPressureField', 2);
 model.component('comp1').physics('acpr').feature('bpf1').selection.set([1]);
-model.component('comp1').physics('acpr').create('efc1', 'ExteriorFieldCalculation', 1);
-model.component('comp1').physics('acpr').feature('efc1').selection.set([19 20]);
+% model.component('comp1').physics('acpr').create('efc1', 'ExteriorFieldCalculation', 1);
+% model.component('comp1').physics('acpr').feature('efc1').selection.set([19 20]);
 model.component('comp1').physics('acpr').feature('bpf1').set('p', 'p_inc');
 model.component('comp1').physics('acpr').feature('bpf1').set('dir', [0; -1; 0]);
 model.component('comp1').physics('acpr').feature('bpf1').set('phi', 'phi');
@@ -342,7 +342,7 @@ disp(' -- Save model')
 % 
 model.sol('sol1').clearSolutionData; %Clear solution data
 model.mesh.clearMeshes; %Clear meshes
-mphsave(model,[File.Path,filesep,File.Tag,File.Extension]);
+mphsave(model,[File.Path,filesep,File.Tag1,File.Extension]);
 
 disp(' -- DONE')
 

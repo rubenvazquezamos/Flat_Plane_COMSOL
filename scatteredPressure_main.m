@@ -21,7 +21,8 @@ clear; clear global *; clc; warning off; close all;
 %% COMSOL FILE INFORMATION
 %-------------------------------------------------------------------------%
 File.Path = [pwd,filesep,'Models'];
-File.Tag = 'Comsol_QRD5';
+File.Tag1 = 'Comsol_QRD5';
+File.Tag2 = 'flat_plane';
 File.Extension = '.mph';
 %-------------------------------------------------------------------------%
 
@@ -35,9 +36,9 @@ Freq.Nf = numel(Freq.Vector);                   % Number of frequencies
 
 %% COMSOL PROBE INFORMATION
 %-------------------------------------------------------------------------%
-Probe.radius = 3; %radius of arc in meters
-Probe.theta_min = 0; %arc starting angle
-Probe.theta_max = pi; %arc end angle
+Probe.radius = 1; %radius of arc in meters
+Probe.theta_min = pi*(10/180); %arc starting angle
+Probe.theta_max = pi*(170/180); %arc end angle
 Probe.Resolution = 181;
 Probe.theta_vector = linspace(Probe.theta_min,Probe.theta_max,Probe.Resolution);
 Probe.Coordinates(1,:) = Probe.radius*cos(Probe.theta_vector); %Probe x coordinates
@@ -79,6 +80,7 @@ plot(Freq.Vector,delta_flatnum,"LineWidth",1)
 hold on
 plot(Freq.Vector,deltaf,"LineWidth",1,"LineStyle","--")
 ylim([0, 1])
-legend("N=5 QRD (numerical)","N=5 QRD (TMM)","flat plane (numerical)","flat_plane (TMM)")
+legend("N=5 QRD (numerical)","N=5 QRD (TMM)","flat plane (numerical)","flat_plane (TMM)",...
+    "Location","southeast")
 xlabel("Hz")
 %-------------------------------------------------------------------------%
