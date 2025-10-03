@@ -1,4 +1,4 @@
-%Saves rerunning model
+% parametric study of the effect of Probe distance on diffusion coefficient
 
 query = questdlg('run model?');
 switch query
