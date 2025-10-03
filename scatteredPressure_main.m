@@ -80,4 +80,5 @@ hold on
 plot(Freq.Vector,deltaf,"LineWidth",1,"LineStyle","--")
 ylim([0, 1])
 legend("N=5 QRD (numerical)","N=5 QRD (TMM)","flat plane (numerical)","flat_plane (TMM)")
+xlabel("Hz")
 %-------------------------------------------------------------------------%
