@@ -144,11 +144,14 @@ model.component('comp1').physics('acpr').feature('bpf1').set('phi', 'phi');
 model.component('comp1').physics('acpr').feature('bpf1').set('pamp', 1);
 model.component('comp1').physics('acpr').feature('bpf1').set('c_mat', 'from_mat');
 
+%-------------------------------------------------------------------------%
 %% PML
 disp(' -- Set PML')
 %-------------------------------------------------------------------------%
 model.component('comp1').physics('acpr').create('pmb1', 'PerfectlyMatchedBoundary', 1);
 model.component('comp1').physics('acpr').feature('pmb1').selection.set([19 20]);
+model.component('comp1').physics('acpr').feature('pmb1').set('directionType', 'radial');
+
 model.component('comp1').physics('acpr').create('pmb2', 'PerfectlyMatchedBoundary', 1);
 model.component('comp1').physics('acpr').feature('pmb2').selection.set([1 18]);
 model.component('comp1').physics('acpr').feature('pmb2').set('directionType', 'normal');
