@@ -30,7 +30,7 @@ model.param.set('d3', '0.272[m]', 'Depth of well 3');
 model.param.set('d4', '0.272[m]', 'Depth of well 4');
 model.param.set('d5', '0.068[m]', 'Depth of well 5');
 model.param.set('d6', '0.000001[m]', 'Depth of well 6');
-model.param.set('r_air', 'L*40', 'Radius of the air domain (for single diffuser)');
+model.param.set('r_air', num2str(Probe.domain), 'Radius of the air domain (for single diffuser)');
 model.param.set('r0', '100[m]', 'Evaluation distance');
 model.param.set('Hair', '1[m]', 'Height of the air domain');
 model.param.set('Hpml', '0.2[m]', 'Thickness of the PML');
@@ -90,34 +90,31 @@ mphgeom(model,'geom1','facealpha',0.5);
 box on;
 kk = input('Is the geometry valid?');clear kk;
 
-% model.component('comp1').selection.create('sel1', 'Explicit');
-% model.component('comp1').selection('sel1').geom('geom1', 1);
-% model.component('comp1').selection('sel1').set([4 5]);
-% model.component('comp1').selection('sel1').label('Far Field');
-
 %-------------------------------------------------------------------------%
 %% PHYSICS
 disp(' -- Implementing physics')
 %-------------------------------------------------------------------------%
 
-
 model.component('comp1').physics.create('acpr', 'PressureAcoustics', 'geom1');
 model.component('comp1').physics('acpr').create('bpf1', 'BackgroundPressureField', 2);
 model.component('comp1').physics('acpr').feature('bpf1').selection.set([1]);
-% model.component('comp1').physics('acpr').create('efc1', 'ExteriorFieldCalculation', 1);
-% model.component('comp1').physics('acpr').feature('efc1').selection.set([4 5]);
-model.component('comp1').physics('acpr').create('pmb1', 'PerfectlyMatchedBoundary', 1);
-model.component('comp1').physics('acpr').feature('pmb1').selection.set([4 5]);
-model.component('comp1').physics('acpr').create('pmb2', 'PerfectlyMatchedBoundary', 1);
-model.component('comp1').physics('acpr').feature('pmb2').selection.set([1 3]);
-
 model.component('comp1').physics('acpr').feature('bpf1').set('p', 'p_inc');
 model.component('comp1').physics('acpr').feature('bpf1').set('dir', [0; -1; 0]);
 model.component('comp1').physics('acpr').feature('bpf1').set('phi', 'phi');
 model.component('comp1').physics('acpr').feature('bpf1').set('pamp', 1);
 model.component('comp1').physics('acpr').feature('bpf1').set('c_mat', 'from_mat');
-model.component('comp1').physics('acpr').feature('pmb2').set('directionType', 'normal');
 
+%-------------------------------------------------------------------------%
+%% PML
+disp(' -- Set PML')
+%-------------------------------------------------------------------------%
+model.component('comp1').physics('acpr').create('pmb1', 'PerfectlyMatchedBoundary', 1);
+model.component('comp1').physics('acpr').feature('pmb1').selection.set([4 5]);
+model.component('comp1').physics('acpr').feature('pmb1').set('directionType', 'radial');
+
+model.component('comp1').physics('acpr').create('pmb2', 'PerfectlyMatchedBoundary', 1);
+model.component('comp1').physics('acpr').feature('pmb2').selection.set([1 3]);
+model.component('comp1').physics('acpr').feature('pmb2').set('directionType', 'normal');
 
 %-------------------------------------------------------------------------%
 %% MATERIAL
@@ -293,8 +290,16 @@ pressure = mphinterp(model,'acpr.p_s','coord',Probe.Coordinates);
 disp(' -- Save model')
 %-------------------------------------------------------------------------%
 % 
-model.sol('sol1').clearSolutionData; %Clear solution data
-model.mesh.clearMeshes; %Clear meshes
+save_dlg = questdlg("clear solution and mesh data?");
+
+switch save_dlg
+    case 'Yes'
+    model.sol('sol1').clearSolutionData; %Clear solution data
+    model.mesh.clearMeshes; %Clear meshes
+    case 'No'
+    
+end
+
 mphsave(model,[File.Path,filesep,File.Tag2,File.Extension]);
 
 disp(' -- DONE')

@@ -1,1 +1,0 @@
-model.component('comp1').geom('geom1').feature('r5').active(false);

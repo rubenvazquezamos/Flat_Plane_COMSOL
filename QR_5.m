@@ -28,7 +28,7 @@ model.param.set('d3', '0.272[m]', 'Depth of well 3');
 model.param.set('d4', '0.272[m]', 'Depth of well 4');
 model.param.set('d5', '0.068[m]', 'Depth of well 5');
 model.param.set('d6', '0.000001[m]', 'Depth of well 6');
-model.param.set('r_air', 'L*40', 'Radius of the air domain (for single diffuser)');
+model.param.set('r_air', num2str(Probe.domain), 'Radius of the air domain (for single diffuser)');
 model.param.set('r0', '100[m]', 'Evaluation distance');
 model.param.set('Hair', '1[m]', 'Height of the air domain');
 model.param.set('Hpml', '0.2[m]', 'Thickness of the PML');

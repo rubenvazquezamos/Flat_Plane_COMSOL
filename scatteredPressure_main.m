@@ -29,14 +29,15 @@ File.Extension = '.mph';
 %% FREQUENCY
 %-------------------------------------------------------------------------%
 Freq.f_min = 125;                                  % Minimum Freq of interest
-Freq.f_max = 500;                               % Maximum Freq of interest
+Freq.f_max = 250;                               % Maximum Freq of interest
 Freq.df = 5;                                    % Freq discretization
 Freq.Vector = (Freq.f_min:Freq.df:Freq.f_max);    % Freq vector
 Freq.Nf = numel(Freq.Vector);                   % Number of frequencies
 
 %% COMSOL PROBE INFORMATION
 %-------------------------------------------------------------------------%
-Probe.radius = 1; %radius of arc in meters
+Probe.domain = 100; %radius of air domain in meters
+Probe.radius = 50; %radius of arc in meters
 Probe.theta_min = pi*(10/180); %arc starting angle
 Probe.theta_max = pi*(170/180); %arc end angle
 Probe.Resolution = 181;
@@ -80,7 +81,7 @@ plot(Freq.Vector,delta_flatnum,"LineWidth",1)
 hold on
 plot(Freq.Vector,deltaf,"LineWidth",1,"LineStyle","--")
 ylim([0, 1])
-legend("N=5 QRD (numerical)","N=5 QRD (TMM)","flat plane (numerical)","flat_plane (TMM)",...
+legend(["N=5 QRD (numerical)","N=5 QRD (TMM)","flat plane (numerical)","flat plane (TMM)"],...
     "Location","southeast")
 xlabel("Hz")
 %-------------------------------------------------------------------------%
