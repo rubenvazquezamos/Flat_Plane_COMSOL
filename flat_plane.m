@@ -90,11 +90,6 @@ mphgeom(model,'geom1','facealpha',0.5);
 box on;
 kk = input('Is the geometry valid?');clear kk;
 
-% model.component('comp1').selection.create('sel1', 'Explicit');
-% model.component('comp1').selection('sel1').geom('geom1', 1);
-% model.component('comp1').selection('sel1').set([4 5]);
-% model.component('comp1').selection('sel1').label('Far Field');
-
 %-------------------------------------------------------------------------%
 %% PHYSICS
 disp(' -- Implementing physics')
