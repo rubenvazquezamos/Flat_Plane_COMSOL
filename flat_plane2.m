@@ -1,4 +1,4 @@
-function [pressure] = flat_plane2(Probe,File)
+function [pressure] = flat_plane2(Freq,Probe,File)
 
 %-------------------------------------------------------------------------%
 %% CALL COMSOL
@@ -27,16 +27,16 @@ model.param.set('d3', '0.272[m]', 'Depth of well 3');
 model.param.set('d4', '0.272[m]', 'Depth of well 4');
 model.param.set('d5', '0.068[m]', 'Depth of well 5');
 model.param.set('d6', '0.000001[m]', 'Depth of well 6');
-model.param.set('r_air', '3', 'Radius of the air domain (for single diffuser)');
+model.param.set('r_air', num2str(Probe.domain), 'Radius of the air domain (for single diffuser)');
 model.param.set('r0', '100[m]', 'Evaluation distance');
 model.param.set('Hair', '1[m]', 'Height of the air domain');
 model.param.set('Hpml', '0.2[m]', 'Thickness of the PML');
 model.param.group.create('par2');
 model.param('par2').set('c0', '343[m/s]', 'Speed of sound');
 model.param('par2').set('rho0', '1.225[kg/m^3]', 'Density');
-model.param('par2').set('f_min', '125');
-model.param('par2').set('f_max', '1000');
-model.param('par2').set('df', '5');
+model.param('par2').set('f_min', num2str(Freq.f_min));
+model.param('par2').set('f_max', num2str(Freq.f_max));
+model.param('par2').set('df', num2str(Freq.df));
 model.param('par2').set('phi', '0 [rad]', 'phase angle');
 model.param.label('Geometry');
 model.param('par2').label('Physics');

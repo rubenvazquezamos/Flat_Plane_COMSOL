@@ -49,7 +49,7 @@ Probe.Coordinates(2,:) = Probe.radius*sin(Probe.theta_vector); %Probe y coordina
 %-------------------------------------------------------------------------%
 tStart = tic;
 % Ps_1 = QR_5(Freq,Probe,File); %call COMSOL model for QRD
-Psflatnum = flat_plane2(Probe,File);  %call COMSOL model for flat plane
+Psflatnum = flat_plane2(Freq,Probe,File);  %call COMSOL model for flat plane
 tEnd = toc(tStart);
 fprintf('FEM. time: %d minutes and  %.f seconds\n', floor(tEnd/60), rem(tEnd,60));
 %-------------------------------------------------------------------------%
@@ -73,15 +73,17 @@ delta_flatnum = (SIsumflatnum.^2 - SIsqflatnum)./((n_d-1)*(SIsqflatnum));
 run("QRD_TMM.m")
 figure()
 % plot(Freq.Vector,delta_COMSOL,"LineWidth",1); %plot diffusion coefficient
-% title("diffusion coefficient")
+
 % hold on
-plot(Freq.Vector,delta_QRD,"LineWidth",1)
-hold on
+% plot(Freq.Vector,delta_QRD,"LineWidth",1)
+% hold on
 plot(Freq.Vector,delta_flatnum,"LineWidth",1)
 hold on
 plot(Freq.Vector,deltaf,"LineWidth",1,"LineStyle","--")
-ylim([0, 1])
-legend(["N=5 QRD (numerical)","N=5 QRD (TMM)","flat plane (numerical)","flat plane (TMM)"],...
+ylim([0.7, 1])
+legend(["flat plane (numerical)","flat plane (TMM)"],...
     "Location","southeast")
+title("diffusion coefficient - $r=3$m")
 xlabel("Hz")
+ylabel("$\delta$")
 %-------------------------------------------------------------------------%
