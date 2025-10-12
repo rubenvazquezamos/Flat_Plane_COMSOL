@@ -48,8 +48,8 @@ Probe.Coordinates(2,:) = Probe.radius*sin(Probe.theta_vector); %Probe y coordina
 %% FEM MODELLING
 %-------------------------------------------------------------------------%
 tStart = tic;
-% Ps_1 = QR_5(Freq,Probe,File); %call COMSOL model for QRD
-Psflatnum = flat_plane2(Freq,Probe,File);  %call COMSOL model for flat plane
+Ps_1 = QR_5(Freq,Probe,File); %call COMSOL model for QRD
+Psflatnum = flat_plane(Freq,Probe,File);  %call COMSOL model for flat plane
 tEnd = toc(tStart);
 fprintf('FEM. time: %d minutes and  %.f seconds\n', floor(tEnd/60), rem(tEnd,60));
 %-------------------------------------------------------------------------%
@@ -57,12 +57,12 @@ fprintf('FEM. time: %d minutes and  %.f seconds\n', floor(tEnd/60), rem(tEnd,60)
 %% CALCULATE DIFFUSION COEFFICIENT
 %-------------------------------------------------------------------------%
 % QRD
-% SI_1 = abs(Ps_1).^2; %sound intensity
-% SIsum_1 = sum(SI_1,2);
-% SIsq_1 = sum(SI_1.^2,2);
-% 
+SI_1 = abs(Ps_1).^2; %sound intensity
+SIsum_1 = sum(SI_1,2);
+SIsq_1 = sum(SI_1.^2,2);
+
 n_d = length(Probe.theta_vector);
-% delta_COMSOL = (SIsum_1.^2 - SIsq_1)./((n_d-1)*(SIsq_1));
+delta_COMSOL = (SIsum_1.^2 - SIsq_1)./((n_d-1)*(SIsq_1));
 
 % Flat plane
 SIflatnum = abs(Psflatnum).^2; %sound intensity
@@ -72,11 +72,11 @@ delta_flatnum = (SIsumflatnum.^2 - SIsqflatnum)./((n_d-1)*(SIsqflatnum));
 
 run("QRD_TMM.m")
 figure()
-% plot(Freq.Vector,delta_COMSOL,"LineWidth",1); %plot diffusion coefficient
+plot(Freq.Vector,delta_COMSOL,"LineWidth",1); %plot diffusion coefficient
 
-% hold on
-% plot(Freq.Vector,delta_QRD,"LineWidth",1)
-% hold on
+hold on
+plot(Freq.Vector,delta_QRD,"LineWidth",1)
+hold on
 plot(Freq.Vector,delta_flatnum,"LineWidth",1)
 hold on
 plot(Freq.Vector,deltaf,"LineWidth",1,"LineStyle","--")
