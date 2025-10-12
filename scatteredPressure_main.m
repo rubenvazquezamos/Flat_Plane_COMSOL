@@ -29,7 +29,7 @@ File.Extension = '.mph';
 %% FREQUENCY
 %-------------------------------------------------------------------------%
 Freq.f_min = 125;                                  % Minimum Freq of interest
-Freq.f_max = 4000;                               % Maximum Freq of interest
+Freq.f_max = 2500;                               % Maximum Freq of interest
 Freq.df = 25;                                    % Freq discretization
 Freq.Vector = (Freq.f_min:Freq.df:Freq.f_max);    % Freq vector
 Freq.Nf = numel(Freq.Vector);                   % Number of frequencies

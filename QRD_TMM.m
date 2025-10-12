@@ -19,7 +19,7 @@ fmax = Freq.f_max; % Maximum Freq of interest
 fmin = Freq.f_min; % Minimum Freq of interest
 df = Freq.df; %frequency step
                                                    
-a = 3e-1; %size of half of panel in metres
+a = 0.5; %size of panel in metres
 W = 9e-2; %width of well in m.
 step = lcm(N,100);
 x = linspace(0,a,step);
