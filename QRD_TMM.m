@@ -19,10 +19,10 @@ fmax = Freq.f_max; % Maximum Freq of interest
 fmin = Freq.f_min; % Minimum Freq of interest
 df = Freq.df; %frequency step
                                                    
-a = 0.5; %size of panel in metres
+a = Geo.D./2 ; %size of half panel in metres
 W = 9e-2; %width of well in m.
 step = lcm(N,100);
-x = linspace(0,a,step);
+x = linspace(-a,a,step);
 theta = linspace(-pi/2,pi/2,181);
 
 %% QRD depths

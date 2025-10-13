@@ -1,4 +1,4 @@
-function [pressure] = flat_plane(Freq,Probe,File)
+function [pressure] = flat_plane(Freq,Geo,Probe,File)
 
 %-------------------------------------------------------------------------%
 %% CALL COMSOL
@@ -17,7 +17,7 @@ model.component.create('comp1', true);
 disp(' -- Sending parameters')
 %-------------------------------------------------------------------------%
 
-model.param.set('L', '0.5[m]', 'Width of the flat plane');
+model.param.set('L', num2str(Geo.D), 'Width of the flat plane');
 % model.param.set('Lw', '0.09[m]', 'Width of one well');
 model.param.set('Li', '0.01[m]', 'Width in between wells');
 % model.param.set('H', '0.3[m]', 'Height of the diffuser');
@@ -63,10 +63,11 @@ model.component('comp1').geom('geom1').feature('c1').set('layername', {'PML'});
 model.component('comp1').geom('geom1').feature('c1').setIndex('layer', '0.75', 0);
 model.component('comp1').geom('geom1').feature('c1').set('r', 'r_air');
 model.component('comp1').geom('geom1').feature('c1').set('angle', 180);
-model.component('comp1').geom('geom1').create('pt1', 'Point');
-model.component('comp1').geom('geom1').feature('pt1').set('p', {'-L/2+Li' '0'});
+model.component('comp1').geom('geom1').create('pol1', 'Polygon');
+model.component('comp1').geom('geom1').feature('pol1').set('type', 'open');
+model.component('comp1').geom('geom1').feature('pol1').set('source', 'table');
+model.component('comp1').geom('geom1').feature('pol1').set('table', {'-L/2' '0'; 'L/2' '0'});
 model.component('comp1').geom('geom1').run;
-model.component('comp1').geom('geom1').run('fin');
 
 %%% EXTRA CODE: visualise the geometry before going further with
 % approval input with the [Enter] key.
@@ -86,13 +87,12 @@ model.component('comp1').physics.create('acpr', 'PressureAcoustics', 'geom1');
 model.component('comp1').physics('acpr').create('bpf1', 'BackgroundPressureField', 2);
 model.component('comp1').physics('acpr').feature('bpf1').selection.set([1 2 3]);
 model.component('comp1').physics('acpr').create('imp1', 'Impedance', 1);
-model.component('comp1').physics('acpr').feature('imp1').selection.set([2 4]);
+model.component('comp1').physics('acpr').feature('imp1').selection.set([2 6]);
 model.component('comp1').physics('acpr').feature('bpf1').set('p', 'p_inc');
 model.component('comp1').physics('acpr').feature('bpf1').set('dir', [0; -1; 0]);
 model.component('comp1').physics('acpr').feature('bpf1').set('phi', 'phi');
 model.component('comp1').physics('acpr').feature('bpf1').set('pamp', 1);
 model.component('comp1').physics('acpr').feature('bpf1').set('c_mat', 'from_mat');
-
 
 %-------------------------------------------------------------------------%
 %% PML

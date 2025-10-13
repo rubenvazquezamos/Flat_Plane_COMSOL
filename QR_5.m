@@ -1,4 +1,4 @@
-function [pressure] = QR_5(Freq,Probe,File)
+function [pressure] = QR_5(Freq,Geo,Probe,File)
 %
 % QR_5_test1.m
 %
@@ -24,8 +24,8 @@ model.component.create('comp1', true);
 disp(' -- Sending parameters')
 %-------------------------------------------------------------------------%
 
-model.param.set('L', '0.5[m]', 'Width of the diffuser');
-model.param.set('Lw', '0.09[m]', 'Width of one well');
+model.param.set('L', num2str(Geo.D), 'Width of the diffuser');
+model.param.set('Lw', num2str(Geo.W), 'Width of one well');
 model.param.set('Li', '0.01[m]', 'Width in between wells');
 model.param.set('H', '0.3[m]', 'Height of the diffuser');
 model.param.set('d1', '0[m]', 'Depth of well 1');
