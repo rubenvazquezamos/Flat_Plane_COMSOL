@@ -1,13 +1,3 @@
-%Preamble to set figure text interpreter to Latex----------------------------------------------------%
-set(groot,'defaultAxesTickLabelInterpreter','latex');  
-set(groot,'defaulttextinterpreter','latex');
-set(groot,'defaultLegendInterpreter','latex');
-set(groot,'defaultAxesFontSize',18)
-set(0,'DefaultFigureWindowStyle','normal')
-path = convertCharsToStrings(fileparts(matlab.desktop.editor.getActiveFilename));
-cd(path)
-addpath(genpath('C:\Users\User\Dropbox\PhD\Projects\Fig 3.6'))
-
 %% Constants
 rho = 1.204; %density of air
 c = 340; %speed of sound
@@ -20,9 +10,9 @@ fmin = Freq.f_min; % Minimum Freq of interest
 df = Freq.df; %frequency step
                                                    
 a = Geo.D./2 ; %size of half panel in metres
-W = 9e-2; %width of well in m.
-step = lcm(N,100);
-x = linspace(-a,a,step);
+W = Geo.W; %width of well in m.
+numxpts = lcm(N,100);
+x = linspace(-a,a,numxpts);
 theta = linspace(-pi/2,pi/2,181);
 
 %% QRD depths
@@ -40,7 +30,7 @@ k = w./c; %wavenumber vector
 
 %% Impedance of QWR (no losses)
 z = rho.*c; %specific acoustic impedance of air at 20degC
-Z_0 = z./W; %characteristic impedance of slit? Careful. This goes to infinity when slit is infinitely thin.
+Z_0 = z./W; %characteristic impedance of slit
 Zw = -1i*Z_0.*cot(L.*k);  %array is calculated by implicit expansion
 
 %% Matrices
@@ -86,3 +76,24 @@ deltaf = (SIfsum.^2 - SIfsq)./((n_d-1)*(SIfsq)); %unnormalised diffusion coeffic
 
 %% Normalised Diffusion Coefficient
 deltan = (delta_QRD - deltaf)./(1-deltaf);
+
+
+function Ps = fftfraunhofer(theta,Rs,k,x)
+    % ======================================
+    %
+    %   PS = FFTFRAUNHOFER(THETA,RS,K,X)
+    %
+    %   FFTFRAUNHOFER calculates the far field PS using the Fraunhofer integral
+    %   of a surface with reflection RS(X) at wavenumber K and at angles THETA
+    %
+    %   Noé Jiménez, Salford, October 2016
+    %
+    %=======================================
+    na = length(x);
+    dx = x(2)-x(1);
+    Ps = zeros(size(theta));
+    for ia=1:na
+        Ps = Ps+Rs(ia).*exp(1i*k*x(ia)*sin(theta))*dx; 
+    end
+
+end

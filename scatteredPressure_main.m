@@ -29,7 +29,7 @@ File.Extension = '.mph';
 %% FREQUENCY
 %-------------------------------------------------------------------------%
 Freq.f_min = 125;                                  % Minimum Freq of interest
-Freq.f_max = 126;                               % Maximum Freq of interest
+Freq.f_max = 4000;                               % Maximum Freq of interest
 Freq.df = 25;                                    % Freq discretization
 Freq.Vector = (Freq.f_min:Freq.df:Freq.f_max);    % Freq vector
 Freq.Nf = numel(Freq.Vector);                   % Number of frequencies
@@ -37,12 +37,12 @@ Freq.Nf = numel(Freq.Vector);                   % Number of frequencies
 %% GEOMETRY
 %-------------------------------------------------------------------------%
 Geo.D = 5e-1; %width of panel in m
-Geo.W = 9e-3; %width of single well
+Geo.W = 9e-2; %width of single well
 %-------------------------------------------------------------------------%
 
 %% COMSOL PROBE INFORMATION
 %-------------------------------------------------------------------------%
-Probe.domain = 5; %radius of air domain in meters
+Probe.domain = 10; %radius of air domain in meters
 Probe.radius = 3; %radius of arc in meters
 Probe.theta_min = pi*(10/180); %arc starting angle
 Probe.theta_max = pi*(170/180); %arc end angle
@@ -54,8 +54,8 @@ Probe.Coordinates(2,:) = Probe.radius*sin(Probe.theta_vector); %Probe y coordina
 %% FEM MODELLING
 %-------------------------------------------------------------------------%
 tStart = tic;
-% Ps_1 = QR_5(Freq,Probe,File); %call COMSOL model for QRD
-Psflatnum = Copy_of_flat_plane(Freq,Geo,Probe,File);  %call COMSOL model for flat plane
+Ps_1 = QR_5(Freq,Geo,Probe,File); %call COMSOL model for QRD
+Psflatnum = flat_plane(Freq,Geo,Probe,File);  %call COMSOL model for flat plane
 tEnd = toc(tStart);
 fprintf('FEM. time: %d minutes and  %.f seconds\n', floor(tEnd/60), rem(tEnd,60));
 %-------------------------------------------------------------------------%
@@ -83,13 +83,13 @@ switch calcDC
     
     run("QRD_TMM.m")
     figure()
-    plot(Freq.Vector,delta_COMSOL,"LineWidth",1); %plot diffusion coefficient
+    plot(Freq.Vector,delta_COMSOL,"LineWidth",2); %plot diffusion coefficient
     hold on
-    plot(Freq.Vector,delta_QRD,"LineWidth",1)
+    plot(Freq.Vector,delta_QRD,"LineWidth",2)
     hold on
-    plot(Freq.Vector,delta_flatnum,"LineWidth",1)
+    plot(Freq.Vector,delta_flatnum,"LineWidth",2)
     hold on
-    plot(Freq.Vector,deltaf,"LineWidth",1,"LineStyle","--")
+    plot(Freq.Vector,deltaf,"LineWidth",2,"LineStyle","--")
     ylim([0, 1])
     legend(["N=5 QRD (numerical)","N=5 QRD (TMM)","flat plane (numerical)","flat plane (TMM)"],...
         "Location","southeast")
@@ -101,3 +101,4 @@ switch calcDC
         return
 
 end
+
